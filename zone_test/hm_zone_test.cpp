@@ -7,6 +7,7 @@
 //
 
 #include "leveldb/db.h"
+#include "leveldb/env_zns.h"
 #include <cassert>
 #include <iostream>
 #include "hm_zone.h"
@@ -28,6 +29,22 @@ int main() {
     cout << res << endl;
 
     HmZoneNamespace hmZoneNamespace;
+    hmZoneNamespace.NewZone();
+
+    ZoneAddress zoneAddress;
+    zoneAddress.zone_id = 0;
+    zoneAddress.offset = 0;
+    const char test[] = "this is a test";
+    zoneAddress.length = sizeof(test);
+    cout<<"~~~~~~write~~~~~~~~"<<endl;
+    status = hmZoneNamespace.Write(zoneAddress,test);
+    cout<<status.ToString()<<endl;
+    cout<<"~~~~~~~~~~~read~~~~~~~~~~~"<<endl;
+    char result[zoneAddress.length];
+    hmZoneNamespace.Read(zoneAddress,result);
+    cout<<status.ToString()<<endl;
+    cout<<result<<endl;
+
 
     delete db;
     return 0;
